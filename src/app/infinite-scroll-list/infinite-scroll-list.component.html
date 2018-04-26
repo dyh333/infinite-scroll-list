@@ -5,4 +5,7 @@
     </tr>
   </tbody>
 </table>
-<nz-spin [nzSpinning]="loading"></nz-spin>
+<div style="display: flex; justify-content: space-around;">
+  <nz-spin *ngIf="!isEnding" [nzSize]="'small'" [nzSpinning]="loading" [nzTip]="'正在读取数据...'"></nz-spin>
+  <span *ngIf="isEnding">没有更多数据了...</span>
+</div>

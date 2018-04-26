@@ -17,7 +17,7 @@ import {
 @Component({
   selector: 'app-infinite-scroll-list',
   templateUrl: './infinite-scroll-list.component.html',
-  styleUrls: ['./infinite-scroll-list.component.css']
+  styleUrls: ['./infinite-scroll-list.component.scss']
 })
 export class InfiniteScrollListComponent implements OnInit {
   private cache = [];
@@ -58,6 +58,7 @@ export class InfiniteScrollListComponent implements OnInit {
   ).pipe(distinct(), filter(page => this.cache[page - 1] === undefined));
 
   loading = false;
+  isEnding = false;
 
   // 基于pageToLoad$流来创建一个新的流，它将包含无限滚动加载列表中的数据
   itemResults$ = this.pageToLoad$.pipe(
@@ -66,29 +67,38 @@ export class InfiniteScrollListComponent implements OnInit {
       return this.httpClient
         .get(`https://swapi.co/api/people?page=${page}`)
         .pipe(
-          map((resp: any) => resp.results),
+          map((resp: any) => {
+            // ONLY TEST
+            const result = resp.results;
+            if (page > 3) {
+              return [];
+            } else {
+              return result;
+            }
+          }),
           tap(resp => {
-            this.cache[page - 1] = resp;
-            if (
-              this.itemHeight * this.numberOfItems * page <
-              window.innerHeight
-            ) {
-              this.pageByManual$.next(page + 1);
+            this.loading = false;
+
+            if (resp && resp.length > 0) {
+              this.cache[page - 1] = resp;
+              if (
+                this.itemHeight * this.numberOfItems * page <
+                window.innerHeight
+              ) {
+                this.pageByManual$.next(page + 1);
+              }
+            } else {
+              this.isEnding = true;
             }
           })
         );
     }),
     map(() => {
-      const flatten = list =>
-        list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-
-      return flatten(this.cache);
-      // return _.flatMap(this.cache);
+      return this.cache.reduce((a, b) => a.concat(b), []);
     })
   );
 
   constructor(private httpClient: HttpClient) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
