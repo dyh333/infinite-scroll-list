@@ -23,6 +23,6 @@ export class InfiniteScrollListComponent extends InfiniteScrollComponent<string>
   }
 
   appendData(page: number): Observable<string> {
-    return this.infiniteScrollService.loadByPage(page);
+    return this.infiniteScrollService.loadByPage(page, this.numberOfItems);
   }
 }

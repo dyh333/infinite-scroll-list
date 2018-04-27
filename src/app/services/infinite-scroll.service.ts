@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 export class InfiniteScrollService {
   constructor(private httpClient: HttpClient) {}
 
-  loadByPage(page: number): Observable<any> {
+  loadByPage(page: number, pageSize: number): Observable<any> {
     return this.httpClient
     .get(`https://swapi.co/api/people?page=${page}`);
   }
