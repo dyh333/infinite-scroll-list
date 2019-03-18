@@ -1,11 +1,19 @@
-<table>
+<!-- <table>
   <tbody>
     <tr *ngFor="let item of itemResults|async" [style.height]="itemHeight + 'px'">
       <td>{{item.name}}</td>
     </tr>
   </tbody>
-</table>
+</table> -->
+<div
+  [style.height]="itemHeight + 'px'"
+  *ngFor="let item of (itemResults | async)"
+>
+  {{ item.name }}
+</div>
+
 <div style="display: flex; justify-content: space-around;">
-  <nz-spin *ngIf="!isEnding" [nzSize]="'small'" [nzSpinning]="isLoading" [nzTip]="'正在读取数据...'"></nz-spin>
+  <!-- <nz-spin *ngIf="!isEnding" [nzSize]="'small'" [nzSpinning]="isLoading" [nzTip]="'正在读取数据...'"></nz-spin> -->
+  <span *ngIf="!isEnding">正在读取数据...</span>
   <span *ngIf="isEnding">没有更多数据了...</span>
 </div>

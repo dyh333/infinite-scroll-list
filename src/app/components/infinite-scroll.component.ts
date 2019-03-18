@@ -63,7 +63,7 @@ export abstract class InfiniteScrollComponent<T> {
         map((resp: any) => {
           // ONLY FOR TEST
           const result = resp.results;
-          if (page > 3) {
+          if (page >= 10) {
             return [];
           } else {
             return result;
